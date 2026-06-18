@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Wardrobe Radar",
+  "version": "1.0",
+  "description": "Videolardakı və şəkillərdəki geyimləri seçin, tapın və dərhal etibarlı mağazalardan əldə edin.",
+  "permissions": [
+    "sidePanel",
+    "scripting",
+    "storage",
+    "tabs",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "side_panel.html"
+  },
+  "action": {
+    "default_title": "Open Wardrobe Radar"
+  },
+  "commands": {
+    "trigger_capture": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+S",
+        "mac": "MacCtrl+Shift+S"
+      },
+      "description": "Capture an item for Wardrobe Radar"
+    }
+  }
+}
