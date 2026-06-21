@@ -124,7 +124,8 @@ async function processWithSerpApi(base64Image, tabId) {
     const serpApiKey = '1d13e59ea64308c6bd47f71fa9736169cb684ca97305a694733e714d3fe911fe';
     const serpApiUrl = `https://serpapi.com/search.json?engine=google_lens&url=${encodeURIComponent(imageUrl)}&api_key=${serpApiKey}`;
     
-    const serpRes = await fetchWithTimeout(serpApiUrl, { timeout: 15000 });
+    // Google Lens axtarışı bəzən 15-20 saniyə çəkə bilir, buna görə SerpApi üçün xüsusi 30 saniyəlik timeout veririk
+    const serpRes = await fetchWithTimeout(serpApiUrl, { timeout: 30000 });
     const serpData = await serpRes.json();
     
     if (serpData.error) {
@@ -132,9 +133,10 @@ async function processWithSerpApi(base64Image, tabId) {
     }
     
     const matches = serpData.visual_matches || [];
-    const allowedStores = ['trendyol', 'amazon', 'temu', 'aliexpress'];
+    // Sıralanma ardıcıllığı: Amazon, Temu, Trendyol, AliExpress
+    const allowedStores = ['amazon', 'temu', 'trendyol', 'aliexpress'];
     
-    let groupedResults = { trendyol: [], amazon: [], temu: [], aliexpress: [] };
+    let groupedResults = { amazon: [], temu: [], trendyol: [], aliexpress: [] };
     
     for (let match of matches) {
       const sourceUrl = match.link || '';
@@ -170,22 +172,15 @@ async function processWithSerpApi(base64Image, tabId) {
       }
     }
 
-    // Nəticələri mağazalar arasında balanslaşdırmaq (Round-Robin)
+    // Nəticələri mağazalara görə qruplaşdırıb hərəsindən max 2 dənə ardıcıl götürürük
     let filteredResults = [];
-    let i = 0;
-    const MAX_RESULTS = 16; // Ekranda qəşəng görünsün deyə 16 ədəd (4 sütundan)
     
-    while (filteredResults.length < MAX_RESULTS) {
-      let addedInThisRound = false;
-      for (let store of allowedStores) {
-        if (groupedResults[store].length > i) {
-          filteredResults.push(groupedResults[store][i]);
-          addedInThisRound = true;
-          if (filteredResults.length >= MAX_RESULTS) break;
-        }
+    for (let store of allowedStores) {
+      if (groupedResults[store].length > 0) {
+        // Hər mağazadan maksimum 2 nəticə götür
+        const storeItems = groupedResults[store].slice(0, 2);
+        filteredResults.push(...storeItems);
       }
-      if (!addedInThisRound) break; // Heç bir mağazada əlavə məhsul qalmadı
-      i++;
     }
 
     // State-i yeniləyirik
@@ -201,11 +196,15 @@ async function processWithSerpApi(base64Image, tabId) {
     }).catch(e => console.log("Panel error", e));
 
   } catch (error) {
-    console.error("SerpApi error:", error);
+    console.error("Fetch error caught:", error);
     
     let errorMessage = "Xəta baş verdi: " + error.message;
-    if (error.name === 'AbortError' || error.message.includes('Failed to fetch')) {
-        errorMessage = "Bağlantı xətası: Şəkil yükləmə serveri bloklanıb və ya internet problemi var. Zəhmət olmasa VPN ilə yoxlayın.";
+    
+    // Xətanın növünü ayırd edirik
+    if (error.name === 'AbortError') {
+      errorMessage = "Vaxt bitdi (Timeout): Google Lens axtarışı və ya şəkil yükləməsi çox uzun çəkdi. Zəhmət olmasa yenidən yoxlayın.";
+    } else if (error.message.includes('Failed to fetch') || error.message.includes('ImgBB') || error.message.includes('SerpApi')) {
+      errorMessage = "Bağlantı xətası: " + error.message + ". Zəhmət olmasa VPN ilə yoxlayın.";
     }
 
     if (captureState[tabId]) {

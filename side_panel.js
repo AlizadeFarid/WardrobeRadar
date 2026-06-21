@@ -2,19 +2,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const stateEmpty = document.getElementById('state-empty');
   const stateLoading = document.getElementById('state-loading');
   const stateResults = document.getElementById('state-results');
+  const stateError = document.getElementById('state-error');
   
   const previewImage = document.getElementById('preview-image');
   const resultsContainer = document.getElementById('results-container');
   const resultsCount = document.getElementById('results-count');
+  const errorMessageEl = document.getElementById('error-message');
 
   function showState(state) {
     stateEmpty.classList.remove('active');
     stateLoading.classList.remove('active');
     stateResults.classList.remove('active');
+    stateError.classList.remove('active');
 
     if (state === 'empty') stateEmpty.classList.add('active');
     else if (state === 'loading') stateLoading.classList.add('active');
     else if (state === 'results') stateResults.classList.add('active');
+    else if (state === 'error') stateError.classList.add('active');
   }
 
   function renderResults(results) {
@@ -56,10 +60,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  const retryBtn = document.getElementById('retry-btn');
+  if (retryBtn) {
+    retryBtn.addEventListener('click', () => {
+      chrome.runtime.sendMessage({ action: 'TRIGGER_CAPTURE_FROM_PANEL' });
+    });
+  }
+
   // Check initial state
   chrome.runtime.sendMessage({ action: 'GET_CURRENT_STATE' }, (response) => {
     if (response && response.hasImage && response.state) {
-      previewImage.src = response.state.image;
+      if (response.state.image) previewImage.src = response.state.image;
       
       if (response.state.status === 'loading') {
         showState('loading');
@@ -67,9 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
         renderResults(response.state.data);
         showState('results');
       } else if (response.state.status === 'error') {
-        resultsContainer.innerHTML = `<p style="text-align:center; color:#ef4444; margin-top:20px;">${response.state.data}</p>`;
-        resultsCount.textContent = "0";
-        showState('results');
+        errorMessageEl.textContent = response.state.data;
+        showState('error');
       }
     } else {
       showState('empty');
@@ -89,9 +99,8 @@ document.addEventListener('DOMContentLoaded', () => {
       sendResponse({ success: true });
     }
     else if (request.action === 'RESULTS_ERROR') {
-      resultsContainer.innerHTML = `<p style="text-align:center; color:#ef4444; margin-top:20px;">${request.message}</p>`;
-      resultsCount.textContent = "0";
-      showState('results');
+      errorMessageEl.textContent = request.message;
+      showState('error');
       sendResponse({ success: true });
     }
   });

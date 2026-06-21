@@ -31,7 +31,21 @@
         </div>
         <h2>Axtarış üçün hazır!</h2>
         <p>Videonun və ya şəklin üzərində bəyəndiyiniz geyimi seçmək üçün <strong>Cmd+Shift+S</strong> (Mac) və ya <strong>Ctrl+Shift+S</strong> (Windows) qısayolunu istifadə edin.</p>
-        <button id="start-btn" style="margin-top: 20px; padding: 10px 20px; background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">Axtarışa Başla</button>
+        <button id="start-btn">Axtarışa Başla</button>
+      </div>
+
+      <!-- State: Error -->
+      <div id="state-error" class="state-container">
+        <div class="empty-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+        <h2>Xəta Baş Verdi</h2>
+        <p id="error-message"></p>
+        <button id="retry-btn" style="margin-top: 15px; padding: 10px 20px; background: transparent; border: 1px solid #EF4444; color: #EF4444; border-radius: 8px; cursor: pointer;">Yenidən yoxla</button>
       </div>
 
       <!-- State 2: Loading / Analyzing -->
