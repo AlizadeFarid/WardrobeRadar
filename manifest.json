@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Wardrobe Radar",
+  "name": "Wardrobe Radar - Find Clothes by Image",
   "version": "1.0",
   "description": "Select, find, and instantly shop the exact clothes you see in any video or image from trusted stores.",
   "permissions": [
