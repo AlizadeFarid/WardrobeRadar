@@ -67,6 +67,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  const newSearchBtn = document.getElementById('new-search-btn');
+  if (newSearchBtn) {
+    newSearchBtn.addEventListener('click', () => {
+      chrome.runtime.sendMessage({ action: 'TRIGGER_CAPTURE_FROM_PANEL' });
+    });
+  }
+
   // Check initial state
   chrome.runtime.sendMessage({ action: 'GET_CURRENT_STATE' }, (response) => {
     if (response && response.hasImage && response.state) {

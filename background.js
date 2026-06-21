@@ -133,54 +133,70 @@ async function processWithSerpApi(base64Image, tabId) {
     }
     
     const matches = serpData.visual_matches || [];
-    // Sıralanma ardıcıllığı: Amazon, Temu, Trendyol, AliExpress
-    const allowedStores = ['amazon', 'temu', 'trendyol', 'aliexpress'];
     
-    let groupedResults = { amazon: [], temu: [], trendyol: [], aliexpress: [] };
+    // Əsas mağazalar (Öncəlik verilənlər)
+    const priorityStores = ['amazon', 'temu', 'trendyol', 'aliexpress', 'alibaba', 'shein', 'zara', 'asos', 'ebay', 'etsy'];
+    
+    let groupedResults = {};
+    priorityStores.forEach(store => groupedResults[store] = []);
+    let otherResults = []; // Digər bütün saytlar
     
     for (let match of matches) {
       const sourceUrl = match.link || '';
       const sourceName = (match.source || '').toLowerCase();
       
-      let matchedStore = allowedStores.find(store => 
+      let matchedStore = priorityStores.find(store => 
         sourceName.includes(store) || sourceUrl.includes(store)
       );
       
+      let displayStore = matchedStore ? (matchedStore.charAt(0).toUpperCase() + matchedStore.slice(1)) : (match.source || "Mağaza");
+      let affiliateLink = sourceUrl;
+      
       if (matchedStore) {
-        const displayStore = matchedStore.charAt(0).toUpperCase() + matchedStore.slice(1);
-        
-        let affiliateLink = sourceUrl;
         if (matchedStore === 'amazon') affiliateLink += (sourceUrl.includes('?') ? '&' : '?') + 'tag=wardroberadar-20';
         else if (matchedStore === 'trendyol') affiliateLink += (sourceUrl.includes('?') ? '&' : '?') + 'utm_source=aff_wardrobe_radar';
         else if (matchedStore === 'temu') affiliateLink += (sourceUrl.includes('?') ? '&' : '?') + 'aff_id=wardrobe_radar';
         else if (matchedStore === 'aliexpress') affiliateLink += (sourceUrl.includes('?') ? '&' : '?') + 'aff_short_key=wardrobe_radar';
+      }
 
-        let price = match.price ? `${match.price.extracted_value} ${match.price.currency}` : "Qiymət yoxdur";
-        if (match.price && match.price.currency === '$') price = `$${match.price.extracted_value}`;
+      let price = match.price ? `${match.price.extracted_value} ${match.price.currency}` : "Qiymət yoxdur";
+      if (match.price && match.price.currency === '$') price = `$${match.price.extracted_value}`;
 
-        // Eyni linkin təkrar olunmasının qarşısını alaq
+      const itemData = {
+        id: match.position || Math.random().toString(),
+        title: match.title || "Geyim tapıldı",
+        price: price,
+        store: displayStore,
+        image: match.thumbnail || "https://via.placeholder.com/150?text=Şəkil+Yoxdur",
+        link: affiliateLink,
+        isPriority: !!matchedStore
+      };
+
+      if (matchedStore) {
         if (!groupedResults[matchedStore].find(item => item.link === affiliateLink)) {
-          groupedResults[matchedStore].push({
-            id: match.position || Math.random().toString(),
-            title: match.title || "Geyim tapıldı",
-            price: price,
-            store: displayStore,
-            image: match.thumbnail || "https://via.placeholder.com/150?text=Şəkil+Yoxdur",
-            link: affiliateLink
-          });
+          groupedResults[matchedStore].push(itemData);
+        }
+      } else {
+        if (!otherResults.find(item => item.link === affiliateLink)) {
+          otherResults.push(itemData);
         }
       }
     }
 
-    // Nəticələri mağazalara görə qruplaşdırıb hərəsindən max 2 dənə ardıcıl götürürük
     let filteredResults = [];
     
-    for (let store of allowedStores) {
+    // 1. Öncəlikli mağazalardan maksimum 2-2 götürək
+    for (let store of priorityStores) {
       if (groupedResults[store].length > 0) {
-        // Hər mağazadan maksimum 2 nəticə götür
-        const storeItems = groupedResults[store].slice(0, 2);
-        filteredResults.push(...storeItems);
+        filteredResults.push(...groupedResults[store].slice(0, 2));
       }
+    }
+
+    // 2. Əgər nəticə sayı azdırsa (məsələn, 8-dən azdırsa), boş qalan yerləri digər mağazalarla dolduraq
+    const MIN_RESULTS_WANTED = 8;
+    if (filteredResults.length < MIN_RESULTS_WANTED) {
+      const needed = MIN_RESULTS_WANTED - filteredResults.length;
+      filteredResults.push(...otherResults.slice(0, needed));
     }
 
     // State-i yeniləyirik
