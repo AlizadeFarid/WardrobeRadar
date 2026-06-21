@@ -115,7 +115,7 @@ async function processWithSerpApi(base64Image, tabId) {
     
     const uploadJson = await uploadRes.json();
     if (!uploadJson.success) {
-      throw new Error(`ImgBB Xətası: ${uploadJson.error ? uploadJson.error.message : 'Bilinməyən xəta'}`);
+      throw new Error(`ImgBB Error: ${uploadJson.error ? uploadJson.error.message : 'Unknown error'}`);
     }
     
     const imageUrl = uploadJson.data.url;
@@ -129,7 +129,7 @@ async function processWithSerpApi(base64Image, tabId) {
     const serpData = await serpRes.json();
     
     if (serpData.error) {
-       throw new Error(`SerpApi Xətası: ${serpData.error}`);
+       throw new Error(`SerpApi Error: ${serpData.error}`);
     }
     
     const matches = serpData.visual_matches || [];
@@ -149,7 +149,7 @@ async function processWithSerpApi(base64Image, tabId) {
         sourceName.includes(store) || sourceUrl.includes(store)
       );
       
-      let displayStore = matchedStore ? (matchedStore.charAt(0).toUpperCase() + matchedStore.slice(1)) : (match.source || "Mağaza");
+      let displayStore = matchedStore ? (matchedStore.charAt(0).toUpperCase() + matchedStore.slice(1)) : (match.source || "Store");
       let affiliateLink = sourceUrl;
       
       if (matchedStore) {
@@ -159,15 +159,15 @@ async function processWithSerpApi(base64Image, tabId) {
         else if (matchedStore === 'aliexpress') affiliateLink += (sourceUrl.includes('?') ? '&' : '?') + 'aff_short_key=wardrobe_radar';
       }
 
-      let price = match.price ? `${match.price.extracted_value} ${match.price.currency}` : "Qiymət yoxdur";
+      let price = match.price ? `${match.price.extracted_value} ${match.price.currency}` : "No price";
       if (match.price && match.price.currency === '$') price = `$${match.price.extracted_value}`;
 
       const itemData = {
         id: match.position || Math.random().toString(),
-        title: match.title || "Geyim tapıldı",
+        title: match.title || "Item found",
         price: price,
         store: displayStore,
-        image: match.thumbnail || "https://via.placeholder.com/150?text=Şəkil+Yoxdur",
+        image: match.thumbnail || "https://via.placeholder.com/150?text=No+Image",
         link: affiliateLink,
         isPriority: !!matchedStore
       };
@@ -214,13 +214,13 @@ async function processWithSerpApi(base64Image, tabId) {
   } catch (error) {
     console.error("Fetch error caught:", error);
     
-    let errorMessage = "Xəta baş verdi: " + error.message;
+    let errorMessage = "An error occurred: " + error.message;
     
     // Xətanın növünü ayırd edirik
     if (error.name === 'AbortError') {
-      errorMessage = "Vaxt bitdi (Timeout): Google Lens axtarışı və ya şəkil yükləməsi çox uzun çəkdi. Zəhmət olmasa yenidən yoxlayın.";
+      errorMessage = "Timeout: Google Lens search or image upload took too long. Please try again.";
     } else if (error.message.includes('Failed to fetch') || error.message.includes('ImgBB') || error.message.includes('SerpApi')) {
-      errorMessage = "Bağlantı xətası: " + error.message + ". Zəhmət olmasa VPN ilə yoxlayın.";
+      errorMessage = "Connection error: " + error.message + ". Please try with a VPN.";
     }
 
     if (captureState[tabId]) {
@@ -233,5 +233,12 @@ async function processWithSerpApi(base64Image, tabId) {
       message: errorMessage,
       tabId: tabId
     }).catch(e => console.log("Panel closed", e));
+    
+    chrome.notifications.create({
+      type: "basic",
+      iconUrl: "icon48.png",
+      title: "Wardrobe Radar",
+      message: "An error occurred during processing."
+    });
   }
 }

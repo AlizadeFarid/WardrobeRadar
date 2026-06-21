@@ -29,9 +29,9 @@
             <path d="M3 3h18v18H3zM3 9h18M9 21V9"/>
           </svg>
         </div>
-        <h2>Axtarış üçün hazır!</h2>
-        <p>Videonun və ya şəklin üzərində bəyəndiyiniz geyimi seçmək üçün <strong>Cmd+Shift+S</strong> (Mac) və ya <strong>Ctrl+Shift+S</strong> (Windows) qısayolunu istifadə edin.</p>
-        <button id="start-btn">Axtarışa Başla</button>
+        <h2>Ready to scan!</h2>
+        <p>Press <strong>Cmd+Shift+S</strong> (Mac) or <strong>Ctrl+Shift+S</strong> (Windows) to select and find the clothing you like from any image or video.</p>
+        <button id="start-btn">Start Scanning</button>
       </div>
 
       <!-- State: Error -->
@@ -43,9 +43,9 @@
             <line x1="12" y1="16" x2="12.01" y2="16"></line>
           </svg>
         </div>
-        <h2>Xəta Baş Verdi</h2>
+        <h2>An Error Occurred</h2>
         <p id="error-message"></p>
-        <button id="retry-btn" style="margin-top: 15px; padding: 10px 20px; background: transparent; border: 1px solid #EF4444; color: #EF4444; border-radius: 8px; cursor: pointer;">Yenidən yoxla</button>
+        <button id="retry-btn" style="margin-top: 15px; padding: 10px 20px; background: transparent; border: 1px solid #EF4444; color: #EF4444; border-radius: 8px; cursor: pointer;">Try Again</button>
       </div>
 
       <!-- State 2: Loading / Analyzing -->
@@ -56,7 +56,7 @@
         </div>
         <div class="loading-text">
           <span class="spinner"></span>
-          Uyğun geyimlər axtarılır...
+          Finding matching clothes...
         </div>
         
         <div class="skeleton-list">
@@ -87,10 +87,10 @@
       <!-- State 3: Results -->
       <div id="state-results" class="state-container">
         <div class="results-header">
-          <h3>Tapılan Nəticələr</h3>
+          <h3>Matches Found</h3>
           <span class="badge" id="results-count">0</span>
         </div>
-        <button id="new-search-btn" style="margin-bottom: 16px; padding: 12px 24px; background: white; border: 1px solid var(--primary); color: var(--primary); border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; width: 100%; transition: all 0.2s ease;">Yeni Axtarış</button>
+        <button id="new-search-btn" style="margin-bottom: 16px; padding: 12px 24px; background: white; border: 1px solid var(--primary); color: var(--primary); border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; width: 100%; transition: all 0.2s ease;">New Scan</button>
         <div class="results-list" id="results-container">
           <!-- Cards will be injected here via JS -->
         </div>

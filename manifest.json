@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Wardrobe Radar",
   "version": "1.0",
-  "description": "Videolardakı və şəkillərdəki geyimləri seçin, tapın və dərhal etibarlı mağazalardan əldə edin.",
+  "description": "Select, find, and instantly shop the exact clothes you see in any video or image from trusted stores.",
   "permissions": [
     "sidePanel",
     "scripting",

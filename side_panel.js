@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resultsCount.textContent = results.length;
 
     if (results.length === 0) {
-      resultsContainer.innerHTML = '<p style="text-align:center; color:var(--text-muted); margin-top:20px;">Heç nə tapılmadı.</p>';
+      resultsContainer.innerHTML = '<p style="text-align:center; color:var(--text-muted); margin-top:20px;">No matches found.</p>';
       return;
     }
 
