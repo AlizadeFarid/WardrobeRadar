@@ -20,7 +20,17 @@
     "default_path": "side_panel.html"
   },
   "action": {
-    "default_title": "Open Wardrobe Radar"
+    "default_title": "Open Wardrobe Radar",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
   },
   "commands": {
     "trigger_capture": {
