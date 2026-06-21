@@ -1,16 +1,16 @@
 :root {
-  /* Modern Dark Color Palette */
-  --bg-color: #0B0F19; /* Çox tünd göy/qara fon */
-  --panel-bg: rgba(17, 24, 39, 0.7); /* Şüşə effekti üçün fon */
-  --card-bg: rgba(255, 255, 255, 0.03); /* Kart arxa fonu */
-  --card-hover: rgba(139, 92, 246, 0.08); /* Kart hover edəndə bənövşəyi parıltı */
-  --text-main: #F8FAFC;
-  --text-muted: #94A3B8;
+  /* Clean Light Color Palette */
+  --bg-color: #F8FAFC; /* Çox açıq boz/göyümtül fon */
+  --panel-bg: rgba(255, 255, 255, 0.8);
+  --card-bg: #FFFFFF; /* Ağ kartlar */
+  --card-hover: #FFFFFF;
+  --text-main: #0F172A; /* Tünd göy/qara mətn */
+  --text-muted: #64748B; /* Boz mətn */
   
-  --primary: #8B5CF6; /* Neon Bənövşəyi */
-  --primary-hover: #7C3AED;
-  --secondary: #6366F1; /* İndiqo Göy */
-  --border: rgba(255, 255, 255, 0.08);
+  --primary: #3B82F6; /* Mavi */
+  --primary-hover: #2563EB;
+  --secondary: #EFF6FF; /* Açıq mavi fon */
+  --border: #E2E8F0; /* Zərif boz çərçivə */
   
   --trendyol: #F27A1A;
   --amazon: #F59E0B;
@@ -27,9 +27,6 @@
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background-color: var(--bg-color);
-  background-image: 
-    radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.12), transparent 25%),
-    radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.12), transparent 25%);
   color: var(--text-main);
   min-height: 100vh;
   margin: 0;
@@ -44,10 +41,10 @@ body {
 
 /* Header */
 .header {
-  padding: 18px 24px;
-  background: rgba(11, 15, 25, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  padding: 16px 24px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
@@ -61,19 +58,17 @@ body {
   font-weight: 700;
   font-size: 18px;
   letter-spacing: -0.3px;
-  background: linear-gradient(135deg, #A5B4FC, #D8B4FE);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #1E293B;
 }
 
 .logo svg {
-  color: #A5B4FC;
+  color: var(--primary);
 }
 
 /* Main Content */
 .content {
   flex: 1;
-  padding: 24px;
+  padding: 20px 24px;
   overflow-y: auto;
 }
 
@@ -84,7 +79,7 @@ body {
   background: transparent;
 }
 .content::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: #CBD5E1;
   border-radius: 10px;
 }
 
@@ -93,7 +88,7 @@ body {
   display: none;
   flex-direction: column;
   gap: 24px;
-  animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fadeUp 0.4s ease-out;
 }
 
 .state-container.active {
@@ -101,7 +96,7 @@ body {
 }
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(15px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -114,8 +109,7 @@ body {
 .empty-icon {
   font-size: 48px;
   margin-bottom: 24px;
-  opacity: 0.8;
-  filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.3));
+  color: #94A3B8;
 }
 #state-empty h2 {
   color: var(--text-main);
@@ -124,29 +118,30 @@ body {
   margin-bottom: 12px;
 }
 #state-empty p {
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.6;
 }
 
 /* Premium Button */
 #start-btn {
-  margin-top: 30px;
-  padding: 14px 24px;
-  background: linear-gradient(135deg, var(--secondary), var(--primary));
+  margin-top: 24px;
+  padding: 12px 24px;
+  background: var(--primary);
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
   font-size: 15px;
   width: 100%;
-  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+  transition: all 0.2s ease;
 }
 
 #start-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
 }
 
 #start-btn:active {
@@ -158,14 +153,13 @@ body {
   position: relative;
   width: 100%;
   height: 200px;
-  border-radius: 16px;
+  border-radius: 12px;
   overflow: hidden;
-  background: rgba(0, 0, 0, 0.3);
+  background: #E2E8F0;
   border: 1px solid var(--border);
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
 }
 
 .cropped-image-wrapper img {
@@ -181,9 +175,8 @@ body {
   width: 100%;
   height: 3px;
   background: var(--primary);
-  box-shadow: 0 0 20px 5px rgba(139, 92, 246, 0.6);
-  animation: scan 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  opacity: 0.9;
+  box-shadow: 0 0 15px 3px rgba(59, 130, 246, 0.5);
+  animation: scan 2s linear infinite;
 }
 
 @keyframes scan {
@@ -197,7 +190,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text-main);
 }
@@ -205,7 +198,7 @@ body {
 .spinner {
   width: 18px;
   height: 18px;
-  border: 2px solid var(--border);
+  border: 2px solid #E2E8F0;
   border-top-color: var(--primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
@@ -223,54 +216,51 @@ body {
   margin-bottom: 4px;
 }
 .results-header h3 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text-main);
 }
 .badge {
-  background: rgba(139, 92, 246, 0.15);
-  color: #C4B5FD;
+  background: var(--secondary);
+  color: var(--primary);
   padding: 4px 10px;
   border-radius: 20px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-  border: 1px solid rgba(139, 92, 246, 0.3);
 }
 
 .results-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 /* Product Card */
 .product-card {
   display: flex;
-  gap: 16px;
-  padding: 14px;
+  gap: 14px;
+  padding: 12px;
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 12px;
   text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
 .product-card:hover {
-  background: var(--card-hover);
-  transform: translateY(-3px) scale(1.01);
-  border-color: rgba(139, 92, 246, 0.3);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3), 0 0 15px rgba(139, 92, 246, 0.1);
+  transform: translateY(-2px);
+  border-color: #CBD5E1;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.08);
 }
 
 .product-img {
-  width: 90px;
-  height: 90px;
-  border-radius: 10px;
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
   object-fit: cover;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: #F1F5F9;
+  border: 1px solid #F1F5F9;
 }
 
 .product-info {
@@ -283,7 +273,7 @@ body {
 
 .product-title {
   color: var(--text-main);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 500;
   line-height: 1.4;
   display: -webkit-box;
@@ -300,13 +290,19 @@ body {
 }
 
 .product-price {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
-  color: #FFF;
+  color: var(--text-main);
+}
+
+.product-price.no-price {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
 }
 
 .store-tag {
-  font-size: 11px;
+  font-size: 10px;
   padding: 4px 8px;
   border-radius: 6px;
   font-weight: 700;
@@ -314,22 +310,22 @@ body {
   letter-spacing: 0.5px;
 }
 
-.store-trendyol { background: rgba(242, 122, 26, 0.15); color: var(--trendyol); border: 1px solid rgba(242, 122, 26, 0.3); }
-.store-amazon { background: rgba(245, 158, 11, 0.15); color: var(--amazon); border: 1px solid rgba(245, 158, 11, 0.3); }
-.store-temu { background: rgba(255, 110, 0, 0.15); color: var(--temu); border: 1px solid rgba(255, 110, 0, 0.3); }
-.store-aliexpress { background: rgba(239, 68, 68, 0.15); color: var(--aliexpress); border: 1px solid rgba(239, 68, 68, 0.3); }
+.store-trendyol { background: rgba(242, 122, 26, 0.1); color: var(--trendyol); }
+.store-amazon { background: rgba(245, 158, 11, 0.1); color: var(--amazon); }
+.store-temu { background: rgba(255, 110, 0, 0.1); color: var(--temu); }
+.store-aliexpress { background: rgba(239, 68, 68, 0.1); color: var(--aliexpress); }
 
 /* Error State UI Enhancement */
 #state-error {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  padding: 20px;
-  border-radius: 16px;
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  padding: 24px;
+  border-radius: 12px;
   text-align: center;
 }
 
 #error-message {
-  color: #FECACA;
+  color: #DC2626;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.5;
 }

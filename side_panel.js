@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="product-info">
           <div class="product-title">${item.title}</div>
           <div class="product-bottom">
-            <div class="product-price">${item.price}</div>
+            <div class="product-price ${item.price === 'Qiymət yoxdur' ? 'no-price' : ''}">${item.price}</div>
             <div class="store-tag store-${storeClass}">${item.store}</div>
           </div>
         </div>
