@@ -6,8 +6,6 @@
   "permissions": [
     "sidePanel",
     "scripting",
-    "storage",
-    "tabs",
     "activeTab"
   ],
   "host_permissions": [
